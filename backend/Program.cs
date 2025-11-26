@@ -15,6 +15,7 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddScoped<AuthMiddleware>();
 builder.Services.AddSingleton<ExceptionMiddleware>();
 builder.Services.AddSingleton<ITemplateRendererService, MustacheTemplateService>();
@@ -52,12 +53,11 @@ builder.Services.AddTokenValidationFactory(registry =>
 });
 
 // Register FluentValidation validators
-
-
 ValidatorOptions.Global.PropertyNameResolver = CamelCasePropertyNameResolver.ResolvePropertyName;
 ValidatorOptions.Global.DisplayNameResolver = CamelCasePropertyNameResolver.ResolvePropertyName;
 builder.Services.AddScoped<IValidator<FormRequestDto>, FormRequestDtoValidator>();
 builder.Services.AddScoped<IValidator<EmailTemplateRequestDto>, EmailTemplateRequestDtoValidator>();
+
 builder.Services.AddCors();
 builder.Services.AddOpenApi(options =>
 {
