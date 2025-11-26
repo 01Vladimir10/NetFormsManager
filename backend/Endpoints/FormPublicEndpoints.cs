@@ -14,10 +14,23 @@ public static class FormPublicEndpoints
 {
     public static void MapFormPublicEndpoints(this IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/forms/{formId:guid:}/fields", async (Guid formId, IFormsRepository formsRepository) =>
+        builder.MapGet("/forms/{formId:guid:}/fields", async (Guid formId, IFormsRepository formsRepository, HttpContext context) =>
             {
                 var form = await formsRepository.FindByIdAsync(formId);
-                return form is null ? ErrorResults.NotFound() : Results.Ok(form.Fields);
+
+                if (form == null) return Results.NotFound();
+                
+                var refererValidationResult = ValidateFormReferer(form, context.Request);
+
+                if (refererValidationResult is not null)
+                {
+                    return refererValidationResult;
+                }
+                
+                // configure cors
+                context.Response.Headers.Vary = "Origin";
+                context.Response.Headers.AccessControlAllowOrigin = context.Request.Headers.Origin;
+                return Results.Ok(form.Fields);
             })
             .AllowAnonymous();
 
@@ -39,11 +52,15 @@ public static class FormPublicEndpoints
                     var logger = loggerFactory.CreateLogger("FormsSubmit");
                     // var logger = loggerFactory.CreateLogger("FormSubmit");
                     var form = await formsRepository.FindByIdAsync(formId);
+                    
+                    // configure cors
+                    context.Response.Headers.Vary = "Origin";
+                    context.Response.Headers.AccessControlAllowOrigin = context.Request.Headers.Origin;
 
                     if (form == null)
                         return ErrorResults.NotFound();
 
-                    var (payloadErrorResult, payload , rawPayload) = await ReadPayload(form, context.Request);
+                    var (payloadErrorResult, payload, rawPayload) = await ReadPayload(form, context.Request);
 
                     if (payloadErrorResult is not null)
                         return payloadErrorResult;
@@ -117,9 +134,11 @@ public static class FormPublicEndpoints
         return null;
     }
 
-    private static async Task<(IResult? httpResult, Dictionary<string, object?> payload, Dictionary<string, string?> rawPayload)> ReadPayload(
-        FormEntity form,
-        HttpRequest request)
+    private static async
+        Task<(IResult? httpResult, Dictionary<string, object?> payload, Dictionary<string, string?> rawPayload)>
+        ReadPayload(
+            FormEntity form,
+            HttpRequest request)
     {
         var body = await ReadBodyAsDictionary(request);
         if (body == null)
@@ -213,9 +232,9 @@ public static class FormPublicEndpoints
     {
         if (form.Subscription is null ||
             !subscriptionProviderFactory.TryCreate(form.Subscription.Provider, out var subscriptionProvider)) return;
-        
+
         var emailAddress = payload.GetValueOrDefault(form.Subscription.FieldReferences.Email)?.ToString();
-        
+
         var name = string.IsNullOrWhiteSpace(form.Subscription.FieldReferences.Name)
             ? null
             : payload.GetValueOrDefault(form.Subscription.FieldReferences.Name)?.ToString();
@@ -246,20 +265,21 @@ public static class FormPublicEndpoints
         HttpContext context, string method)
     {
         var form = await formsRepository.FindByIdAsync(formId);
-        if (form is null) return Results.Empty;
-        var headers = context.Request.GetTypedHeaders();
-        var host = headers.Referer?.Host;
+        if (form is null) return Results.NotFound();
+
         var allowedOrigin = form.AllowedOrigins switch
         {
             ["*"] => "*",
-            _ when host is not null &&
-                   form.AllowedOrigins.Any(x => x.Equals(host, StringComparison.OrdinalIgnoreCase))
-                => host,
+            _ when Uri.TryCreate(context.Request.Headers.Origin.ToString(), UriKind.Absolute, out var origin) &&
+                   form.AllowedOrigins.Any(x => x.Equals(origin.Host, StringComparison.OrdinalIgnoreCase))
+                => context.Request.Headers.Origin.ToString(),
             _ => null
         };
-        if (allowedOrigin is null) return Results.Empty;
+        if (allowedOrigin is null) return Results.BadRequest();
+        context.Response.Headers.Vary = "Origin"; // good practice for caches
         context.Response.Headers.AccessControlAllowOrigin = allowedOrigin;
-        context.Response.Headers.AccessControlAllowHeaders = method;
-        return Results.Empty;
+        context.Response.Headers.AccessControlAllowMethods = $"{context.Request.Headers.AccessControlRequestMethod},OPTIONS";
+        context.Response.Headers.AccessControlAllowHeaders = context.Request.Headers.AccessControlRequestHeaders;
+        return Results.StatusCode(StatusCodes.Status204NoContent);
     }
 }
