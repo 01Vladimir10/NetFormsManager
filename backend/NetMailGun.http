@@ -1,0 +1,6 @@
+@NetMailGun_HostAddress = http://localhost:5268
+
+GET {{NetMailGun_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
