@@ -18,15 +18,15 @@ public static class FormsMappers
             }
         };
 
-        private static FormSubscription FromDto(FormSubscriptionProviderDto? dto) => new()
+        private static FormSubscription FromDto(FormSubscriptionProviderDto dto) => new()
         {
-            Provider = dto?.Provider ?? "",
+            Provider = dto.Provider ?? "",
             FieldReferences = new FormSubscriptionFields
             {
-                Email = dto?.FieldReferences?.Email ?? "",
-                Name = dto?.FieldReferences?.Name,
-                Lastname = dto?.FieldReferences?.Lastname,
-                Phone = dto?.FieldReferences?.Phone
+                Email = dto.FieldReferences?.Email ?? "",
+                Name = dto.FieldReferences?.Name,
+                Lastname = dto.FieldReferences?.Lastname,
+                Phone = dto.FieldReferences?.Phone
             }
         };
     }
@@ -43,6 +43,7 @@ public static class FormsMappers
             CreatedAt = form.CreatedAt,
             SubscriptionsProvider = form.Subscription?.ToDto()
         };
+
         public static FormEntity FromDto(
             FormRequestDto dto,
             Guid id,
@@ -57,7 +58,9 @@ public static class FormsMappers
             BotValidator = dto.BotValidationProvider,
             CreatedAt = createdAt,
             LastUpdatedAt = updatedAt,
-            Subscription = FormSubscription.FromDto(dto.SubscriptionsProvider)
+            Subscription = dto.SubscriptionsProvider is null
+                ? null
+                : FormSubscription.FromDto(dto.SubscriptionsProvider)
         };
     }
 }
