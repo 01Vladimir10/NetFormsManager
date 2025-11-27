@@ -81,16 +81,18 @@ builder.Services.AddOpenApi(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.ConfigureCors(builder.Configuration);
 app.MapOpenApi().AllowAnonymous();
 app.MapScalarApiReference(x => x.PersistentAuthentication = true).AllowAnonymous();
 app.UseHttpLogging();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<AuthMiddleware>();
 
+// do not enable cors for these endpoints.
+app.MapFormPublicEndpoints();
+// enable cors for endpoints that require auth.
+app.ConfigureCors(builder.Configuration);
 app.MapFormEndpoints();
 app.MapEmailTemplateEndpoints();
-app.MapFormPublicEndpoints();
 app.MapProvidersEndpoints();
 app.MapSubscriberEndpoints();
 

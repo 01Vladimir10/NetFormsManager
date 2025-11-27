@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Net.Mime;
 using System.Text.Json;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NetFormsManager.Api;
 using NetFormsManager.Api.Validators;
