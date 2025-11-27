@@ -15,7 +15,9 @@ public class AuthMiddleware(Core.Services.IAuthenticationService authenticationS
             .OfType<AllowAnonymousAttribute>()
             .Any() ?? false;
 
-        if (allowAnonymous || context.User is { Identity.IsAuthenticated: true })
+        var isCorsRequest = context.Request.Method == "OPTIONS";
+
+        if (allowAnonymous || isCorsRequest || context.User is { Identity.IsAuthenticated: true })
         {
             await next(context);
             return;
