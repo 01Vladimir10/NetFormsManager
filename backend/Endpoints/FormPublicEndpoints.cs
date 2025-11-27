@@ -57,7 +57,7 @@ public static class FormPublicEndpoints
                     
                     // configure cors
                     context.Response.Headers.Vary = "Origin";
-                    context.Response.Headers.AccessControlAllowOrigin = context.Request.Headers.Origin;
+                    context.Response.Headers.AccessControlAllowOrigin = context.Request.Headers.Referer;
 
                     if (form == null)
                         return ErrorResults.NotFound();
