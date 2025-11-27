@@ -58,25 +58,9 @@ ValidatorOptions.Global.DisplayNameResolver = CamelCasePropertyNameResolver.Reso
 builder.Services.AddScoped<IValidator<FormRequestDto>, FormRequestDtoValidator>();
 builder.Services.AddScoped<IValidator<EmailTemplateRequestDto>, EmailTemplateRequestDtoValidator>();
 
-builder.Services.AddCors();
-builder.Services.AddOpenApi(options =>
-{
-    
-    options.AddDocumentTransformer((doc, context, _) =>
-    {
-        var configuration = context.ApplicationServices.GetRequiredService<IConfiguration>();
-        var servers = configuration.GetSection("OpenApi:Servers").Get<List<OpenApiServer>>();
-        if (servers is { Count: > 0 })
-        {
-            doc.Servers = servers;
-        }
-        var provider = context.ApplicationServices.GetService<IAuthenticationOpenApiConfigurationProvider>();
-        if (provider is null) return Task.CompletedTask;
-        doc.Components ??= new OpenApiComponents();
-        doc.Components.SecuritySchemes = provider.GetSecuritySchemes();
-        return Task.CompletedTask;
-    });
-});
+
+builder.Services.AddManagedOpenApi();
+builder.Services.AddManagedCors(builder.Configuration);
 
 var app = builder.Build();
 
@@ -87,9 +71,9 @@ app.UseHttpLogging();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<AuthMiddleware>();
 
-app.UseManagedCors(builder.Configuration);
 // do not enable cors for these endpoints.
 app.MapFormPublicEndpoints();
+app.UseCors();
 app.MapFormEndpoints();
 app.MapEmailTemplateEndpoints();
 app.MapProvidersEndpoints();

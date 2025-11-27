@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
 using System.Net.Mime;
 using System.Text.Json;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NetFormsManager.Api;
 using NetFormsManager.Api.Validators;
+using NetFormsManager.Configuration;
 using NetFormsManager.Core.Model;
 using NetFormsManager.Core.Repositories;
 using NetFormsManager.Core.Services;
@@ -15,26 +15,16 @@ public static class FormPublicEndpoints
 {
     public static void MapFormPublicEndpoints(this IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/forms/{formId:guid:}/fields", async (Guid formId, IFormsRepository formsRepository, HttpContext context) =>
-            {
-                var form = await formsRepository.FindByIdAsync(formId);
-
-                if (form == null) return Results.NotFound();
-                
-                var refererValidationResult = ValidateFormReferer(form, context.Request);
-
-                if (refererValidationResult is not null)
+        builder.MapGet("/forms/{formId:guid:}/fields",
+                async (Guid formId, IFormsRepository formsRepository, HttpContext context) =>
                 {
-                    return refererValidationResult;
-                }
-                
-                // configure cors
-                context.Response.Headers.Vary = "Origin";
-                context.Response.Headers.AccessControlAllowOrigin = context.Request.Headers.Origin;
-                return Results.Ok(form.Fields);
-            })
+                    var form = await formsRepository.FindByIdAsync(formId);
+                    return form == null
+                        ? Results.NotFound()
+                        : ValidateFormReferer(form, context.Request) ?? Results.Ok(form.Fields);
+                })
             .AllowAnonymous()
-            .WithMetadata(new EnableCorsAttribute());
+            .WithDynamicCors();
 
         builder.MapPost(
                 pattern: "/forms/{formId:guid}/submit",
@@ -54,10 +44,6 @@ public static class FormPublicEndpoints
                     var logger = loggerFactory.CreateLogger("FormsSubmit");
                     // var logger = loggerFactory.CreateLogger("FormSubmit");
                     var form = await formsRepository.FindByIdAsync(formId);
-                    
-                    // configure cors
-                    context.Response.Headers.Vary = "Origin";
-                    context.Response.Headers.AccessControlAllowOrigin = context.Request.Headers.Referer;
 
                     if (form == null)
                         return ErrorResults.NotFound();
@@ -101,25 +87,7 @@ public static class FormPublicEndpoints
             .Produces<ErrorDto>(StatusCodes.Status500InternalServerError)
             .Produces<ErrorDto>(StatusCodes.Status404NotFound)
             .Produces<ErrorDto>(StatusCodes.Status400BadRequest)
-            .WithMetadata(new EnableCorsAttribute());
-
-        builder.MapMethods(
-                pattern: "/forms/{formId:guid}/submit",
-                httpMethods: [HttpMethods.Options],
-                handler: ([FromRoute] Guid formId, IFormsRepository formsRepository, HttpContext context)
-                    => HandleDynamicCorsResponse(formId, formsRepository, context)
-            )
-            .AllowAnonymous()
-            .WithMetadata(new EnableCorsAttribute());
-
-        builder.MapMethods(
-                pattern: "/forms/{formId:guid}/fields",
-                httpMethods: [HttpMethods.Options],
-                handler: ([FromRoute] Guid formId, IFormsRepository formsRepository, HttpContext context)
-                    => HandleDynamicCorsResponse(formId, formsRepository, context)
-            )
-            .AllowAnonymous()
-            .WithMetadata(new EnableCorsAttribute());
+            .WithDynamicCors();
     }
 
     private static async Task<IResult?> ValidateFormBot(FormEntity form, string token,
@@ -196,13 +164,13 @@ public static class FormPublicEndpoints
     private static IResult? ValidateFormReferer(FormEntity form, HttpRequest request)
     {
         var referer = request.GetTypedHeaders().Referer;
-        return referer is not null
-               && (form.AllowedOrigins is ["*"] ||
-                   form.AllowedOrigins.Any(x => referer.Host.Equals(x, StringComparison.OrdinalIgnoreCase)))
+        return referer is null ||
+               form.AllowedOrigins is ["*"] ||
+               form.AllowedOrigins.Any(x => referer.Host.Equals(x, StringComparison.OrdinalIgnoreCase))
             ? null
             : ErrorResults.BadRequest(
                 "Not allowed",
-                $"'{referer?.Authority}' is not allowed to submit this form"
+                $"'{referer.Authority}' is not allowed to submit this form"
             );
     }
 
@@ -264,26 +232,5 @@ public static class FormPublicEndpoints
             lastName: lastName,
             phoneNumber: phone
         );
-    }
-
-    private static async Task<IResult> HandleDynamicCorsResponse(Guid formId, IFormsRepository formsRepository, HttpContext context)
-    {
-        var form = await formsRepository.FindByIdAsync(formId);
-        if (form is null) return Results.NotFound();
-
-        var allowedOrigin = form.AllowedOrigins switch
-        {
-            ["*"] => "*",
-            _ when Uri.TryCreate(context.Request.Headers.Origin.ToString(), UriKind.Absolute, out var origin) &&
-                   form.AllowedOrigins.Any(x => x.Equals(origin.Host, StringComparison.OrdinalIgnoreCase))
-                => context.Request.Headers.Origin.ToString(),
-            _ => null
-        };
-        if (allowedOrigin is null) return Results.BadRequest();
-        context.Response.Headers.Vary = "Origin"; // good practice for caches
-        context.Response.Headers.AccessControlAllowOrigin = allowedOrigin;
-        context.Response.Headers.AccessControlAllowMethods = $"{context.Request.Headers.AccessControlRequestMethod},OPTIONS";
-        context.Response.Headers.AccessControlAllowHeaders = context.Request.Headers.AccessControlRequestHeaders;
-        return Results.NoContent();
     }
 }

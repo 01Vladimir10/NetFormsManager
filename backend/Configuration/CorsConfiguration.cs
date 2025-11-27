@@ -1,8 +1,12 @@
-﻿namespace NetFormsManager.Configuration;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using NetFormsManager.Infrastructure.Middleware;
 
-public static partial class CorsConfiguration
+namespace NetFormsManager.Configuration;
+
+public static class CorsConfiguration
 {
-    public class CorsOptions
+    public class ConfigurableCorsOptions
     {
         public bool Enabled { get; set; }
         public bool AllowAnyOrigin { get; set; }
@@ -13,46 +17,41 @@ public static partial class CorsConfiguration
         public TimeSpan? PreflightMaxAge { get; set; }
     }
 
-    public static void UseManagedCors(this WebApplication app, IConfiguration configuration)
+    public static void AddManagedCors(this IServiceCollection services, IConfiguration configuration)
     {
-        if (!configuration.GetSection("Cors").Exists())
+        services.Configure<CorsOptions>(corsOptions =>
         {
-            return;
-        }
-
-        var options = configuration.GetSection("Cors").Get<CorsOptions>();
-        
-        if (options is not { Enabled: true })
-        {
-            return;
-        }
-        
-
-        app.UseCors(builder =>
-        {
-            
-            LogConfiguringCorsSettingsOptions(app.Logger, options);
-            if (options.AllowAnyOrigin)
+            var options = configuration.GetSection("Cors").Get<ConfigurableCorsOptions>();
+            if (options is { Enabled: true })
             {
-                builder.AllowAnyOrigin();
-            }
-            else
-            {
-                if (options.AllowCredentials)
-                    builder.AllowCredentials();
-                if (options.AllowedOrigins != null)
-                    builder.WithOrigins(options.AllowedOrigins);
-            }
+                corsOptions.AddDefaultPolicy(builder =>
+                {
+                    if (options.AllowAnyOrigin)
+                    {
+                        builder.AllowAnyOrigin();
+                    }
+                    else
+                    {
+                        if (options.AllowCredentials)
+                            builder.AllowCredentials();
+                        if (options.AllowedOrigins != null)
+                            builder.WithOrigins(options.AllowedOrigins);
+                    }
 
-            if (options.AllowedMethods != null)
-                builder.WithMethods(options.AllowedMethods);
-            if (options.AllowedHeaders != null)
-                builder.WithHeaders(options.AllowedHeaders);
-            if (options.PreflightMaxAge is not null)
-                builder.SetPreflightMaxAge(options.PreflightMaxAge.Value);
+                    if (options.AllowedMethods != null)
+                        builder.WithMethods(options.AllowedMethods);
+                    if (options.AllowedHeaders != null)
+                        builder.WithHeaders(options.AllowedHeaders);
+                    if (options.PreflightMaxAge is not null)
+                        builder.SetPreflightMaxAge(options.PreflightMaxAge.Value);
+                });
+            }
         });
+        services.AddTransient<ICorsService, CorsService>();
+        services.AddTransient<ICorsPolicyProvider, DynamicCorsPolicyProvider>();
+        services.AddTransient<DefaultCorsPolicyProvider>();
     }
 
-    [LoggerMessage(LogLevel.Information, "Configuring CORS. Settings: {options}")]
-    static partial void LogConfiguringCorsSettingsOptions(this ILogger logger, CorsOptions options);
+    public static TBuilder WithDynamicCors<TBuilder>(this TBuilder builder) where TBuilder : IEndpointConventionBuilder
+        => builder.WithMetadata(new EnableCorsAttribute(DynamicCorsPolicyProvider.DynamicCorsPolicy));
 }
