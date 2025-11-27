@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
-using NetMailGun.Core.Model;
+using NetFormsManager.Core.Model;
 
-namespace NetMailGun.Api.Validators;
+namespace NetFormsManager.Api.Validators;
 
 public static class FormPayloadParser
 {

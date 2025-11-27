@@ -1,7 +1,7 @@
-﻿using NetMailGun.Infrastructure.Database.Firestore;
-using NetMailGun.Infrastructure.Database.Mem;
+﻿using NetFormsManager.Infrastructure.Database.Firestore;
+using NetFormsManager.Infrastructure.Database.Mem;
 
-namespace NetMailGun.Configuration;
+namespace NetFormsManager.Configuration;
 
 public static class DatabaseConfiguration
 {

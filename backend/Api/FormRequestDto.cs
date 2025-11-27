@@ -1,6 +1,6 @@
-﻿using NetMailGun.Core.Model;
+﻿using NetFormsManager.Core.Model;
 
-namespace NetMailGun.Api;
+namespace NetFormsManager.Api;
 
 public class FormRequestDto
 {

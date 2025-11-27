@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NetMailGun.Core.Model;
+namespace NetFormsManager.Core.Model;
 
 public class FormEntity
 {

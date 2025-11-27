@@ -1,4 +1,4 @@
-﻿namespace NetMailGun.Core.Services;
+﻿namespace NetFormsManager.Core.Services;
 
 public interface ITemplateRendererService
 {

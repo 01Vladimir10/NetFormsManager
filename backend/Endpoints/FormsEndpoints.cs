@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NetMailGun.Api;
-using NetMailGun.Api.Mappers;
-using NetMailGun.Core.Model;
-using NetMailGun.Core.Repositories;
+using NetFormsManager.Api;
+using NetFormsManager.Api.Mappers;
+using NetFormsManager.Core.Model;
+using NetFormsManager.Core.Repositories;
 
-namespace NetMailGun.Endpoints;
+namespace NetFormsManager.Endpoints;
 
 public static class FormsEndpoints
 {
@@ -14,13 +14,13 @@ public static class FormsEndpoints
         endpoints.MapGet("/forms", async (IFormsRepository formsRepository) =>
         {
             var forms = await formsRepository.GetAllAsync();
-            return Results.Ok(forms.Select(x => x.ToDto()));
+            return Results.Ok(forms.Select<FormEntity, FormDto>(x => x.ToDto()));
         });
 
         endpoints.MapGet("/forms/{formId:guid}", async (Guid formId, IFormsRepository formsRepository) =>
         {
             var form = await formsRepository.FindByIdAsync(formId);
-            return form is null ? ErrorResults.NotFound() : Results.Ok(form.ToDto());
+            return form is null ? ErrorResults.NotFound() : Results.Ok<FormDto>(form.ToDto());
         });
         
         endpoints.MapPost("/forms",
@@ -36,7 +36,7 @@ public static class FormsEndpoints
                 var form = FormEntity.FromDto(request, Guid.CreateVersion7());
                 form.CreatedAt = DateTime.UtcNow;
                 await formsRepository.CreateAsync(form);
-                return Results.Ok(form.ToDto());
+                return Results.Ok<FormDto>(form.ToDto());
             }
         );
         endpoints.MapPut("/forms/{formId:guid}", async (IFormsRepository formsRepository,
@@ -66,7 +66,7 @@ public static class FormsEndpoints
                 existingForm.LastUpdatedAt = DateTime.UtcNow;
     
                 await formsRepository.UpdateAsync(form);
-                return Results.Ok(form.ToDto());
+                return Results.Ok<FormDto>(form.ToDto());
             }
         );
         endpoints.MapDelete("/forms/{formId:guid}", async (IFormsRepository formsRepository, Guid formId) =>
@@ -80,7 +80,7 @@ public static class FormsEndpoints
 
             await formsRepository.DeleteByIdAsync(formId);
 
-            return Results.Ok(existingForm.ToDto());
+            return Results.Ok<FormDto>(existingForm.ToDto());
         });
     }
 }

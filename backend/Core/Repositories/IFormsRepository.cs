@@ -1,6 +1,6 @@
-﻿using NetMailGun.Core.Model;
+﻿using NetFormsManager.Core.Model;
 
-namespace NetMailGun.Core.Repositories;
+namespace NetFormsManager.Core.Repositories;
 
 public interface IRepository<T>
 {

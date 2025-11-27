@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi;
 
-namespace NetMailGun.Core.Services;
+namespace NetFormsManager.Core.Services;
 
 public interface IAuthenticationService
 {

@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Options;
-using NetMailGun.Core.Services;
+using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Infrastructure.Email;
+namespace NetFormsManager.Infrastructure.Email;
 
 public class SmtpOptions
 {

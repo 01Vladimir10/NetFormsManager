@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using FluentValidation.Internal;
 
-namespace NetMailGun.Utils;
+namespace NetFormsManager.Utils;
 
 public static class CamelCasePropertyNameResolver
 {

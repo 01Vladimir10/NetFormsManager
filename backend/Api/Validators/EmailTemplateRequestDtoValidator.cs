@@ -1,7 +1,7 @@
 using System.Net.Mail;
 using FluentValidation;
 
-namespace NetMailGun.Api.Validators;
+namespace NetFormsManager.Api.Validators;
 
 public class EmailTemplateRequestDtoValidator : AbstractValidator<EmailTemplateRequestDto>
 {

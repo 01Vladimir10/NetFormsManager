@@ -1,6 +1,6 @@
-﻿using NetMailGun.Core.Services;
+﻿using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Infrastructure.Email;
+namespace NetFormsManager.Infrastructure.Email;
 
 public class EmptyEmailService(ILogger<EmptyEmailService> logger) : IEmailService
 {

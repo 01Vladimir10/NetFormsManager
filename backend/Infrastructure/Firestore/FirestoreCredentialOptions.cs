@@ -1,4 +1,4 @@
-﻿namespace NetMailGun.Infrastructure.Firestore;
+﻿namespace NetFormsManager.Infrastructure.Firestore;
 
 public class FirestoreCredentialOptions
 {

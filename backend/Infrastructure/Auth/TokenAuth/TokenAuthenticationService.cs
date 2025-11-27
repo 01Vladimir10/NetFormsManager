@@ -3,9 +3,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
-using NetMailGun.Core.Services;
+using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Infrastructure.Auth.TokenAuth;
+namespace NetFormsManager.Infrastructure.Auth.TokenAuth;
 
 public class TokenAuthenticationServiceOptions
 {

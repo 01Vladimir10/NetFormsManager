@@ -1,5 +1,5 @@
-﻿using NetMailGun.Core.Services;
+﻿using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Api;
+namespace NetFormsManager.Api;
 
 public record BotValidationProviderDto(string Name, IDictionary<string, BotValidationParameterInfo> Parameters);

@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Google.Cloud.Firestore;
 
-namespace NetMailGun.Infrastructure.Firestore;
+namespace NetFormsManager.Infrastructure.Firestore;
 
 public class FirestoreGuidConverter : IFirestoreConverter<Guid>
 {

@@ -1,7 +1,7 @@
-﻿using NetMailGun.Api;
-using NetMailGun.Core.Services;
+﻿using NetFormsManager.Api;
+using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Endpoints;
+namespace NetFormsManager.Endpoints;
 
 public static class ProvidersEndpoints
 {

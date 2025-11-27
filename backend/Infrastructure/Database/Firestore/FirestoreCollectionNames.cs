@@ -1,4 +1,4 @@
-namespace NetMailGun.Infrastructure.Database.Firestore;
+namespace NetFormsManager.Infrastructure.Database.Firestore;
 
 internal static class FirestoreCollectionNames
 {

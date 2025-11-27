@@ -1,8 +1,8 @@
 ﻿using Google.Cloud.Firestore;
-using NetMailGun.Core.Services;
-using NetMailGun.Infrastructure.Firestore;
+using NetFormsManager.Core.Services;
+using NetFormsManager.Infrastructure.Firestore;
 
-namespace NetMailGun.Infrastructure.Subscriptions.Firestore;
+namespace NetFormsManager.Infrastructure.Subscriptions.Firestore;
 
 public static class FirestoreSubscriptionConfigurationExtensions
 {

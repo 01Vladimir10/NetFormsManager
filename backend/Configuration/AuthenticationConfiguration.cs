@@ -1,6 +1,6 @@
-﻿using NetMailGun.Infrastructure.Auth.TokenAuth;
+﻿using NetFormsManager.Infrastructure.Auth.TokenAuth;
 
-namespace NetMailGun.Configuration;
+namespace NetFormsManager.Configuration;
 
 public static class AuthenticationConfiguration
 {

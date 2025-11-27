@@ -1,7 +1,7 @@
-﻿using NetMailGun.Core.Model;
-using NetMailGun.Core.Repositories;
+﻿using NetFormsManager.Core.Model;
+using NetFormsManager.Core.Repositories;
 
-namespace NetMailGun.Infrastructure.Database.Mem;
+namespace NetFormsManager.Infrastructure.Database.Mem;
 
 public class FormsMemRepository : IFormsRepository
 {

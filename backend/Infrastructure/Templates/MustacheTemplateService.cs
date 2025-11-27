@@ -1,6 +1,6 @@
-﻿using NetMailGun.Core.Services;
+﻿using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Infrastructure.Templates;
+namespace NetFormsManager.Infrastructure.Templates;
 
 public class MustacheTemplateService : ITemplateRendererService
 {

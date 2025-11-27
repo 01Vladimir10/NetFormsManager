@@ -1,16 +1,16 @@
 using FluentValidation;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.OpenApi;
-using NetMailGun.Api;
-using NetMailGun.Api.Validators;
-using NetMailGun.Configuration;
-using NetMailGun.Core.Services;
-using NetMailGun.Endpoints;
-using NetMailGun.Infrastructure.Email;
-using NetMailGun.Infrastructure.Templates;
-using NetMailGun.Infrastructure.TokenValidators;
-using NetMailGun.Middleware;
-using NetMailGun.Utils;
+using NetFormsManager.Api;
+using NetFormsManager.Api.Validators;
+using NetFormsManager.Configuration;
+using NetFormsManager.Core.Services;
+using NetFormsManager.Endpoints;
+using NetFormsManager.Infrastructure.Email;
+using NetFormsManager.Infrastructure.Templates;
+using NetFormsManager.Infrastructure.TokenValidators;
+using NetFormsManager.Middleware;
+using NetFormsManager.Utils;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);

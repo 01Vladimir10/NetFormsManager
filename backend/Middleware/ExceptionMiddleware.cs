@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using NetMailGun.Api;
+using NetFormsManager.Api;
 
-namespace NetMailGun.Middleware;
+namespace NetFormsManager.Middleware;
 
 public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger) : IMiddleware
 {

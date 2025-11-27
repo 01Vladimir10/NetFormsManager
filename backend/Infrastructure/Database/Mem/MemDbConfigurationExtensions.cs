@@ -1,8 +1,8 @@
-﻿using NetMailGun.Core.Repositories;
-using NetMailGun.Core.Services;
-using NetMailGun.Infrastructure.Templates;
+﻿using NetFormsManager.Core.Repositories;
+using NetFormsManager.Core.Services;
+using NetFormsManager.Infrastructure.Templates;
 
-namespace NetMailGun.Infrastructure.Database.Mem;
+namespace NetFormsManager.Infrastructure.Database.Mem;
 
 public static class MemDbConfigurationExtensions
 {

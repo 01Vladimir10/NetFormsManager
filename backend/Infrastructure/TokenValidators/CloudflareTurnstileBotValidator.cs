@@ -1,7 +1,7 @@
 using System.Text.Json;
-using NetMailGun.Core.Services;
+using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Infrastructure.TokenValidators;
+namespace NetFormsManager.Infrastructure.TokenValidators;
 
 public class CloudflareTurnstileBotValidator(IHttpClientFactory httpClientFactory) : IBotValidatorProvider
 {

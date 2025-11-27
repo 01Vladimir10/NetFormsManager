@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using FluentValidation.Results;
 
-namespace NetMailGun.Api;
+namespace NetFormsManager.Api;
 
 public class ErrorDto
 {

@@ -1,7 +1,7 @@
-﻿using NetMailGun.Core.Services;
-using NetMailGun.Infrastructure.Email;
+﻿using NetFormsManager.Core.Services;
+using NetFormsManager.Infrastructure.Email;
 
-namespace NetMailGun.Configuration;
+namespace NetFormsManager.Configuration;
 
 public static class EmailConfiguration
 {

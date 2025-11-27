@@ -1,9 +1,9 @@
 using Google.Cloud.Firestore;
-using NetMailGun.Core.Model;
-using NetMailGun.Core.Repositories;
-using NetMailGun.Infrastructure.Firestore;
+using NetFormsManager.Core.Model;
+using NetFormsManager.Core.Repositories;
+using NetFormsManager.Infrastructure.Firestore;
 
-namespace NetMailGun.Infrastructure.Database.Firestore.Repositories;
+namespace NetFormsManager.Infrastructure.Database.Firestore.Repositories;
 
 internal class EmailTemplatesFirestoreRepository([FromKeyedServices(FirestoreServiceKeys.Db)] FirestoreDb firestoreDb) : IEmailTemplatesRepository
 {

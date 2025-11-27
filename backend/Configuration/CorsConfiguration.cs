@@ -1,4 +1,4 @@
-﻿namespace NetMailGun.Configuration;
+﻿namespace NetFormsManager.Configuration;
 
 public static partial class CorsConfiguration
 {

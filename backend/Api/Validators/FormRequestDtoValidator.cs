@@ -1,10 +1,10 @@
 using System.Text.RegularExpressions;
 using FluentValidation;
 using FluentValidation.Validators;
-using NetMailGun.Core.Model;
-using NetMailGun.Core.Services;
+using NetFormsManager.Core.Model;
+using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Api.Validators;
+namespace NetFormsManager.Api.Validators;
 
 public class FormRequestDtoValidator : AbstractValidator<FormRequestDto>
 {

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace NetMailGun.Core.Services;
+namespace NetFormsManager.Core.Services;
 
 public interface ISubscriptionProvider
 {

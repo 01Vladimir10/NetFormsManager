@@ -1,6 +1,6 @@
-using NetMailGun.Core.Model;
+using NetFormsManager.Core.Model;
 
-namespace NetMailGun.Api.Mappers;
+namespace NetFormsManager.Api.Mappers;
 
 public static class EmailTemplateMappers
 {

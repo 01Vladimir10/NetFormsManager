@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using NetMailGun.Core.Services;
+using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Infrastructure.Subscriptions;
+namespace NetFormsManager.Infrastructure.Subscriptions;
 
 internal class SubscriptionsProviderFactory(IServiceProvider serviceProvider, ICollection<string> providers)
     : ISubscriptionProviderFactory

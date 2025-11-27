@@ -1,7 +1,7 @@
-﻿using NetMailGun.Infrastructure.Subscriptions;
-using NetMailGun.Infrastructure.Subscriptions.Firestore;
+﻿using NetFormsManager.Infrastructure.Subscriptions;
+using NetFormsManager.Infrastructure.Subscriptions.Firestore;
 
-namespace NetMailGun.Configuration;
+namespace NetFormsManager.Configuration;
 
 public static class SubscriptionsConfiguration
 {

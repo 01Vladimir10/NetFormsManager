@@ -1,4 +1,4 @@
-﻿namespace NetMailGun.Core.Model;
+﻿namespace NetFormsManager.Core.Model;
 
 public class EmailTemplateEntity
 {

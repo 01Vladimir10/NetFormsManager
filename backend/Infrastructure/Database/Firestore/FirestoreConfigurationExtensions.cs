@@ -1,10 +1,10 @@
 ﻿using Google.Cloud.Firestore;
-using NetMailGun.Core.Model;
-using NetMailGun.Core.Repositories;
-using NetMailGun.Infrastructure.Database.Firestore.Repositories;
-using NetMailGun.Infrastructure.Firestore;
+using NetFormsManager.Core.Model;
+using NetFormsManager.Core.Repositories;
+using NetFormsManager.Infrastructure.Database.Firestore.Repositories;
+using NetFormsManager.Infrastructure.Firestore;
 
-namespace NetMailGun.Infrastructure.Database.Firestore;
+namespace NetFormsManager.Infrastructure.Database.Firestore;
 
 internal static class FirestoreConfigurationExtensions
 {

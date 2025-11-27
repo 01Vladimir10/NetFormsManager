@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using NetMailGun.Core.Services;
+using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Infrastructure.TokenValidators;
+namespace NetFormsManager.Infrastructure.TokenValidators;
 
 public class BotValidationFactory(
     IServiceProvider serviceProvider,

@@ -1,4 +1,4 @@
-namespace NetMailGun.Api;
+namespace NetFormsManager.Api;
 
 public class EmailTemplateRequestDto
 {

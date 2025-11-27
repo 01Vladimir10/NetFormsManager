@@ -2,13 +2,13 @@
 using System.Net.Mime;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using NetMailGun.Api;
-using NetMailGun.Api.Validators;
-using NetMailGun.Core.Model;
-using NetMailGun.Core.Repositories;
-using NetMailGun.Core.Services;
+using NetFormsManager.Api;
+using NetFormsManager.Api.Validators;
+using NetFormsManager.Core.Model;
+using NetFormsManager.Core.Repositories;
+using NetFormsManager.Core.Services;
 
-namespace NetMailGun.Endpoints;
+namespace NetFormsManager.Endpoints;
 
 public static class FormPublicEndpoints
 {

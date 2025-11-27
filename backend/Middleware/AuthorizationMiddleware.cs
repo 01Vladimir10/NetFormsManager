@@ -1,8 +1,8 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.Authorization;
-using NetMailGun.Api;
+using NetFormsManager.Api;
 
-namespace NetMailGun.Middleware;
+namespace NetFormsManager.Middleware;
 
 public class AuthMiddleware(Core.Services.IAuthenticationService authenticationService) : IMiddleware
 {

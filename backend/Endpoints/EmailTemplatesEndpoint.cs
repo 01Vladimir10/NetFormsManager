@@ -1,11 +1,11 @@
 using System.Net.Mime;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using NetMailGun.Api;
-using NetMailGun.Api.Mappers;
-using NetMailGun.Core.Repositories;
+using NetFormsManager.Api;
+using NetFormsManager.Api.Mappers;
+using NetFormsManager.Core.Repositories;
 
-namespace NetMailGun.Endpoints;
+namespace NetFormsManager.Endpoints;
 
 public static class EmailTemplatesEndpoint
 {

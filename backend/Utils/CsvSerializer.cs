@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text;
 
-namespace NetMailGun.Utils;
+namespace NetFormsManager.Utils;
 
 public static class CsvSerializer
 {

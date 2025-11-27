@@ -1,4 +1,4 @@
-﻿namespace NetMailGun.Data;
+﻿namespace NetFormsManager.Data;
 
 public class Repository
 {

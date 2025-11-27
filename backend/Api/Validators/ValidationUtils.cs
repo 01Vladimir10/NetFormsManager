@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
 
-namespace NetMailGun.Api.Validators;
+namespace NetFormsManager.Api.Validators;
 
 public static class ValidationUtils
 {

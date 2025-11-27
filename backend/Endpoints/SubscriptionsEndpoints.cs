@@ -1,12 +1,12 @@
 ﻿using System.Net.Mime;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using NetMailGun.Api;
-using NetMailGun.Core.Repositories;
-using NetMailGun.Core.Services;
-using NetMailGun.Utils;
+using NetFormsManager.Api;
+using NetFormsManager.Core.Repositories;
+using NetFormsManager.Core.Services;
+using NetFormsManager.Utils;
 
-namespace NetMailGun.Endpoints;
+namespace NetFormsManager.Endpoints;
 
 public static class SubscriptionsEndpoints
 {
