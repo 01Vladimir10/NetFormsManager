@@ -61,8 +61,15 @@ builder.Services.AddScoped<IValidator<EmailTemplateRequestDto>, EmailTemplateReq
 builder.Services.AddCors();
 builder.Services.AddOpenApi(options =>
 {
+    
     options.AddDocumentTransformer((doc, context, _) =>
     {
+        var configuration = context.ApplicationServices.GetRequiredService<IConfiguration>();
+        var servers = configuration.GetSection("OpenApi:Servers").Get<List<OpenApiServer>>();
+        if (servers is { Count: > 0 })
+        {
+            doc.Servers = servers;
+        }
         var provider = context.ApplicationServices.GetService<IAuthenticationOpenApiConfigurationProvider>();
         if (provider is null) return Task.CompletedTask;
         doc.Components ??= new OpenApiComponents();
