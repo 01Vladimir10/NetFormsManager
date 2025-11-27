@@ -33,7 +33,8 @@ public static class FormPublicEndpoints
                 context.Response.Headers.AccessControlAllowOrigin = context.Request.Headers.Origin;
                 return Results.Ok(form.Fields);
             })
-            .AllowAnonymous();
+            .AllowAnonymous()
+            .WithMetadata(new EnableCorsAttribute());
 
         builder.MapPost(
                 pattern: "/forms/{formId:guid}/submit",
@@ -99,23 +100,26 @@ public static class FormPublicEndpoints
             .Produces(StatusCodes.Status200OK, typeof(void))
             .Produces<ErrorDto>(StatusCodes.Status500InternalServerError)
             .Produces<ErrorDto>(StatusCodes.Status404NotFound)
-            .Produces<ErrorDto>(StatusCodes.Status400BadRequest);
+            .Produces<ErrorDto>(StatusCodes.Status400BadRequest)
+            .WithMetadata(new EnableCorsAttribute());
 
         builder.MapMethods(
                 pattern: "/forms/{formId:guid}/submit",
                 httpMethods: [HttpMethods.Options],
                 handler: ([FromRoute] Guid formId, IFormsRepository formsRepository, HttpContext context)
-                    => HandleDynamicCorsResponse(formId, formsRepository, context, HttpMethods.Post)
+                    => HandleDynamicCorsResponse(formId, formsRepository, context)
             )
-            .AllowAnonymous();
+            .AllowAnonymous()
+            .WithMetadata(new EnableCorsAttribute());
 
         builder.MapMethods(
                 pattern: "/forms/{formId:guid}/fields",
                 httpMethods: [HttpMethods.Options],
                 handler: ([FromRoute] Guid formId, IFormsRepository formsRepository, HttpContext context)
-                    => HandleDynamicCorsResponse(formId, formsRepository, context, HttpMethods.Get)
+                    => HandleDynamicCorsResponse(formId, formsRepository, context)
             )
-            .AllowAnonymous();
+            .AllowAnonymous()
+            .WithMetadata(new EnableCorsAttribute());
     }
 
     private static async Task<IResult?> ValidateFormBot(FormEntity form, string token,
@@ -262,8 +266,7 @@ public static class FormPublicEndpoints
         );
     }
 
-    private static async Task<IResult> HandleDynamicCorsResponse(Guid formId, IFormsRepository formsRepository,
-        HttpContext context, string method)
+    private static async Task<IResult> HandleDynamicCorsResponse(Guid formId, IFormsRepository formsRepository, HttpContext context)
     {
         var form = await formsRepository.FindByIdAsync(formId);
         if (form is null) return Results.NotFound();
@@ -281,6 +284,6 @@ public static class FormPublicEndpoints
         context.Response.Headers.AccessControlAllowOrigin = allowedOrigin;
         context.Response.Headers.AccessControlAllowMethods = $"{context.Request.Headers.AccessControlRequestMethod},OPTIONS";
         context.Response.Headers.AccessControlAllowHeaders = context.Request.Headers.AccessControlRequestHeaders;
-        return Results.StatusCode(StatusCodes.Status204NoContent);
+        return Results.NoContent();
     }
 }

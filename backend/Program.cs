@@ -87,10 +87,9 @@ app.UseHttpLogging();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<AuthMiddleware>();
 
+app.UseManagedCors(builder.Configuration);
 // do not enable cors for these endpoints.
 app.MapFormPublicEndpoints();
-// enable cors for endpoints that require auth.
-app.ConfigureCors(builder.Configuration);
 app.MapFormEndpoints();
 app.MapEmailTemplateEndpoints();
 app.MapProvidersEndpoints();

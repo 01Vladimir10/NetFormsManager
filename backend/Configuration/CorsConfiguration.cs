@@ -13,7 +13,7 @@ public static partial class CorsConfiguration
         public TimeSpan? PreflightMaxAge { get; set; }
     }
 
-    public static void ConfigureCors(this WebApplication app, IConfiguration configuration)
+    public static void UseManagedCors(this WebApplication app, IConfiguration configuration)
     {
         if (!configuration.GetSection("Cors").Exists())
         {
